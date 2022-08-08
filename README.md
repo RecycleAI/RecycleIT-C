@@ -1,1 +1,3 @@
 # RecycleIT-C
+
+## About project
