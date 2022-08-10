@@ -5,5 +5,5 @@
 ## List of contributors
 - Ali Shakeri
 - Pooria Assarehha
-- Mahsa Kalam
+- Mahsa Kalam Jooghan
 - Senobar Naderian
