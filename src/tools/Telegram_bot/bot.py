@@ -8,7 +8,7 @@ from datetime import date
 logging.basicConfig(filename='bot_log.log', filemode='a', level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-ACCESS_TOKEN = "5753521693:AAGve5VvIeUq7bF1Os18NE0uQAOsrn8bcfQ"
+ACCESS_TOKEN = "*****************************************"
 
 WELCOME_MESSAGE = """🔸🔸 سلام! خوش آمدید.
 برای ارسال عکس لطفاً به نکات زیر توجه کنید:
