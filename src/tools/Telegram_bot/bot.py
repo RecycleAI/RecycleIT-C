@@ -8,7 +8,7 @@ from datetime import date
 logging.basicConfig(filename='bot_log.log', filemode='a', level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-ACCESS_TOKEN = "**********************"  # your bot token
+ACCESS_TOKEN = "*****************************************"
 
 WELCOME_MESSAGE = """🔸🔸 سلام! خوش آمدید.
 برای ارسال عکس لطفاً به نکات زیر توجه کنید:
@@ -44,12 +44,12 @@ markup3 = types.ReplyKeyboardMarkup(row_width=2)
 
 itembtn = types.KeyboardButton('ارسال عکس')
 
-itembtn1 = types.KeyboardButton('پلاستیک نوع ۱ ♻️')
-itembtn2 = types.KeyboardButton('پلاستیک نوع ۲ ♻️')
-itembtn3 = types.KeyboardButton('پلاستیک نوع ۳ ♻️')
-itembtn4 = types.KeyboardButton('پلاستیک نوع ۴ ♻️')
-itembtn5 = types.KeyboardButton('پلاستیک نوع ۵ ♻️')
-itembtn6 = types.KeyboardButton('پلاستیک نوع ۶ ♻️')
+itembtn1 = types.KeyboardButton('پلاستیک نوع ۱ (PET) ♻️')
+itembtn2 = types.KeyboardButton('پلاستیک نوع ۲ (PE-HD) ♻️')
+itembtn3 = types.KeyboardButton('پلاستیک نوع ۳ (PVC) ♻️')
+itembtn4 = types.KeyboardButton('پلاستیک نوع ۴ (PE-LD) ♻️')
+itembtn5 = types.KeyboardButton('پلاستیک نوع ۵ (PP) ♻️')
+itembtn6 = types.KeyboardButton('پلاستیک نوع ۶ (PS) ♻️')
 itembtn7 = types.KeyboardButton('نامشخص')
 itembtn8 = types.KeyboardButton('شیشه')
 itembtn9 = types.KeyboardButton('آلومینیوم')
@@ -78,6 +78,7 @@ def send_welcome(message):
 
 
 # Handle photo
+
 @bot.message_handler(content_types=['photo'])
 def save_photo(message):
     global photo_name
@@ -107,7 +108,6 @@ def save_photo(message):
             new_file.write(downloaded_file)
 
         logger.warning('A new photo saved {}'.format(message))
-        photo_name = None
         bot.send_message(message.chat.id,
                          SELFIE_PHOTO_FINISH)
     else:
@@ -128,27 +128,27 @@ def echo_message(message):
         photo = open('img1.jpg', 'rb')
         bot.send_photo(message.chat.id, photo)
 
-    elif message.text == 'پلاستیک نوع ۱ ♻️':
+    elif message.text == 'پلاستیک نوع ۱ (PET) ♻️':
         photo_name = 'PET'
         bot.reply_to(message, PHOTO_MESSAGE, reply_markup=markup3)
 
-    elif message.text == 'پلاستیک نوع ۲ ♻️':
+    elif message.text == 'پلاستیک نوع ۲ (PE-HD) ♻️':
         photo_name = 'PE-HD'
         bot.reply_to(message, PHOTO_MESSAGE, reply_markup=markup3)
 
-    elif message.text == 'پلاستیک نوع ۳ ♻️':
+    elif message.text == 'پلاستیک نوع ۳ (PVC) ♻️':
         photo_name = 'PVC'
         bot.reply_to(message, PHOTO_MESSAGE, reply_markup=markup3)
 
-    elif message.text == 'پلاستیک نوع ۴ ♻️':
+    elif message.text == 'پلاستیک نوع ۴ (PE-LD) ♻️':
         photo_name = 'PE-LD'
         bot.reply_to(message, PHOTO_MESSAGE, reply_markup=markup3)
 
-    elif message.text == 'پلاستیک نوع ۵ ♻️':
+    elif message.text == 'پلاستیک نوع ۵ (PP) ♻️':
         photo_name = 'PP'
         bot.reply_to(message, PHOTO_MESSAGE, reply_markup=markup3)
 
-    elif message.text == 'پلاستیک نوع ۶ ♻️':
+    elif message.text == 'پلاستیک نوع ۶ (PS) ♻️':
         photo_name = 'PS'
         bot.reply_to(message, PHOTO_MESSAGE, reply_markup=markup3)
 
@@ -163,7 +163,6 @@ def echo_message(message):
     elif message.text == 'آلومینیوم':
         photo_name = 'aluminium'
         bot.reply_to(message, PHOTO_MESSAGE, reply_markup=markup3)
-
 
     elif message.text == 'بازگشت به عقب':
         photo_name = None
