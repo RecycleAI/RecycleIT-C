@@ -1,45 +1,37 @@
-import cv2
+import os
 import numpy as np
+import cv2
 
-img = cv2.imread("image path") 
-img = cv2.resize(img, (0, 0), fx= 0.5, fy= 0.5)
-img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-
-
-
-
-red_lower = np.array([136, 87, 111], np.uint8)
-red_upper = np.array([180, 255, 255], np.uint8)
-
-red_mask = cv2.inRange(img, red_lower, red_upper)
-
-kernal = np.ones((5, 5), "uint8")
-
-red = cv2.dilate(red_mask, kernal)
-res = cv2.bitwise_and(img, img, mask = red_mask)
+# map colour names to HSV ranges
+color_list = [
+    ['red', [136, 87, 111], [180, 250, 250]],
+    ['yellow', [22, 60, 200], [60, 250, 250]],
+    ['green', [40, 100, 100], [80, 250, 250]],
+    ['blue', [78, 158, 124], [138, 250, 250]],
+]
 
 
+def detect_main_color(hsv_image, colors):
+    color_found = 'undefined'
+    max_count = 0
 
-#Tracking the red Color
-l1 = []
-l2 = []
-contours, hierarchy = cv2.findContours(red, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)	
-for pic, contour in enumerate(contours):
-    area = cv2.contourArea(contour)
-    l1.append(area)
-    l2.append(contour)
-    d = {}
-    for i in range(len(l1)):
-        d[l1[i]] = l2[i]
-max_area = max(l1)
-max_contour = d[max_area]
-x, y, w, h = cv2.boundingRect(max_contour)
-img = cv2.rectangle(img, (x, y) ,(x + w, y + h), (255 , 255, 255) ,2)
-cv2.putText(img, "RED", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255))
+    for color_name, lower_val, upper_val in colors:
+        # threshold the HSV image - any matching color will show up as white
+        mask = cv2.inRange(hsv_image, np.array(lower_val), np.array(upper_val))
+
+        # count white pixels on mask
+        count = np.sum(mask)
+        if count > max_count:
+            color_found = color_name
+            max_count = count
+
+    return color_found
 
 
+for root, dirs, files in os.walk('./images'):
+    f = os.path.basename(root)
 
-cv2.imshow("Color Tracking",img)
-cv2.imwrite("HamTech-AI\Computer_Vision\Result.jpg", img)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+    for file in files:
+        img = cv2.imread(os.path.join(root, file))
+        hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+        print(f"{file}: {detect_main_color(hsv, color_list)}")
