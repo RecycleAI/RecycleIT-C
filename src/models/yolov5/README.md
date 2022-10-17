@@ -13,3 +13,48 @@ In the first step we need to clone the YOLOV5 repository and install requirement
 %pip install -qr requirements.txt # install dependencies
 %pip install -q roboflow
 ```
+The data set is available from Roboflow and evoked by:
+```bash
+from roboflow import Roboflow
+rf = Roboflow(model_format="yolov5", api_key="zuV4MGwLFCgU3zoG6lrJ")
+project = rf.workspace("recycle-2uipy").project("waste-separation-dnpvc")
+dataset = project.version(1).download("yolov5")
+```
+Now we can train the YOLOv5 model based on our own data set. In the following you can find the training parameters:
+| Model | epochs | batch size | img size | weights | 
+| :--- | :---: | :---: | :---: | :---: |
+| **YOLOv5s** | 100 | 16 | 416*416 | yolov5s.pt |
+|  |  |  |  |  |
+
+To train the model, run the following code:
+```bash
+!python train.py --img 416 --batch 16 --epochs 100 --data data.yaml --weights yolov5s.pt
+```
+## The training results
+The model has been trained in 2.518 hours. The summery of the training procedure:
+
+Model summary: 213 layers, 7020913 parameters, 0 gradients, 15.8 GFLOPs
+|Class  |   Images | Instances  |   P    |  R  |   mAP@.5 | mAP@.5:.95: 100% 30/30 [00:07<00:00,  3.96it/s]|
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+|  all  |  949  |  1001 | 0.988 | 0.985 | 0.989 | 0.82  |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+|0 Alucan| 949  | 237   |0.979  |  0.966|   0.978    |  0.744 |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+|  1 Glass   |     949   |     271    |  0.983   |   0.985   |    0.99   |   0.827 |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+|  2 HDPE    |    949    |    209   |   0.999   |   0.995   |   0.995   |   0.847 |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+|  3 PET     |   949    |    284   |   0.993    |  0.993   |   0.992    |  0.859 |
+|  |  |  |  |  |  |  |
+
+## Take inference
+
+After training the model, we saved the resulted weights which produced by model with the name of best.pt. Now we are be able to take inference from the model by uploading the resulted wieght with the following command:
+```bash 
+!python detect.py --weights path/to/the/weights/best.pt --img 416 --conf 0.1 --source {dataset.location}/images
+```
+## ONNX format
+In order to export our trained model to onnx format, we use the following command:
+```bash
+!python export.py --weights ../best.pt --data ../data.yaml --include torchscript onnx  --imgsz 416 416
+```
