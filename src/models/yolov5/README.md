@@ -13,14 +13,14 @@ In the first step we need to clone the YOLOV5 repository and install requirement
 %pip install -qr requirements.txt # install dependencies
 %pip install -q roboflow
 ```
-The data set is available from Roboflow and evoked by:
+The data set is available from Roboflow and evoked by the following command:
 ```bash
 from roboflow import Roboflow
 rf = Roboflow(model_format="yolov5", api_key="zuV4MGwLFCgU3zoG6lrJ")
 project = rf.workspace("recycle-2uipy").project("waste-separation-dnpvc")
 dataset = project.version(1).download("yolov5")
 ```
-Now we can train the YOLOv5 model based on our own data set. In the following you can find the training parameters:
+Now we can train the YOLOv5 model based on our data set. In the following, you can find the training parameters:
 | Model | epochs | batch size | img size | weights | 
 | :--- | :---: | :---: | :---: | :---: |
 | **YOLOv5s** | 100 | 16 | 416*416 | yolov5s.pt |
@@ -49,7 +49,7 @@ Model summary: 213 layers, 7020913 parameters, 0 gradients, 15.8 GFLOPs
 
 ## Take inference
 
-After training the model, we saved the resulted weights which produced by model with the name of best.pt. Now we are be able to take inference from the model by uploading the resulted wieght with the following command:
+After training the model, we saved the resulting weights produced by the model with the name best.pt. Now we can take inferences from the model by uploading the resulting weight with the following command:
 ```bash 
 !python detect.py --weights path/to/the/weights/best.pt --img 416 --conf 0.1 --source {dataset.location}/images
 ```
