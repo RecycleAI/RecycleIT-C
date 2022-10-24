@@ -1,0 +1,1 @@
+The first version of the script creating bounding box over an object in an image
